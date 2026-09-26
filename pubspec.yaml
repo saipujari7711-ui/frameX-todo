@@ -1,0 +1,17 @@
+name: freelance_ops
+description: Offline-first daily operations app for freelance creators.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.7.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sqflite: ^2.4.4
+  path: ^1.9.1
+  intl: ^0.20.2
+
+flutter:
+  uses-material-design: true
