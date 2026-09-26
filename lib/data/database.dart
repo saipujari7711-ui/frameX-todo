@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/models.dart';
 class AppDb {
   AppDb._(); static final AppDb instance=AppDb._(); Database? _db;
-  Future<Database> get db async=>_db??=await _open();
+  Future<Database> get db async { _db ??= await _open(); return _db!; }
   Future<Database> _open() async { final p=join(await getDatabasesPath(),'freelance_ops.db'); return openDatabase(p,version:1,onCreate:(d,v)async{
     await d.execute('CREATE TABLE leads(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,platform TEXT NOT NULL,niche TEXT NOT NULL,status TEXT NOT NULL,date_contacted TEXT NOT NULL,follow_up_date TEXT NOT NULL,notes TEXT NOT NULL)');
     await d.execute('CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT NOT NULL,category TEXT NOT NULL,date TEXT NOT NULL,completed INTEGER NOT NULL DEFAULT 0)');
@@ -15,7 +15,7 @@ class AppDb {
   }); }
   Future<List<Lead>> leads() async=>(await (await db).query('leads',orderBy:'id DESC')).map(Lead.fromMap).toList();
   Future<int> saveLead(Lead x) async=> (await db).insert('leads',x.toMap()..remove('id'));
-  Future<int> updateLead(Lead x) async=> (await db).update('leads',x.toMap()..remove('id'),where:'id=?',whereArgs:[x.id]);
+  Future<int> updateLead(Lead x) async { final database=await db; final map=x.toMap()..remove('id'); return database.update('leads',map,where:'id=?',whereArgs:[x.id]); }
   Future<void> deleteLead(int id) async=>(await db).delete('leads',where:'id=?',whereArgs:[id]);
   Future<int> todayDms(String date) async{final r=await (await db).rawQuery('SELECT COUNT(*) c FROM leads WHERE date_contacted=?',[date]);return Sqflite.firstIntValue(r)??0;}
   Future<List<Task>> tasks(String date) async=>(await (await db).query('tasks',where:'date=?',whereArgs:[date],orderBy:'id')).map(Task.fromMap).toList();
