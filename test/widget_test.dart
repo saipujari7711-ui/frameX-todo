@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/models/models.dart';
+import 'package:freelance_ops/models/models.dart';
 
 void main() {
   test('Lead model round-trips through map serialization', () {
